@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yoga At Ease – Create Account</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: #eef8f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 1000px;
+            height: 600px;
+            background: #ffffff;
+            border-radius: 24px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        /* LEFT IMAGE */
+        .left {
+            flex: 1;
+            background: url("{{ url_for('static', filename='yoga.jpg') }}") center/cover no-repeat;
+            position: relative;
+        }
+
+        .left::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.25);
+        }
+
+        .brand {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        /* RIGHT FORM */
+        .right {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: #2e8b57;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #256f45;
+        }
+
+        .login-link {
+            margin-top: 25px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .login-link a {
+            color: #2e8b57;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+        <div class="brand">Yoga At Ease</div>
+    </div>
+
+    <div class="right">
+        <h2>Create Account</h2>
+        <p>Join us and start your wellness journey</p>
+
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirm" placeholder="Confirm Password">
+
+        <button onclick="signupUser()">Sign Up</button>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="/">Login</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function signupUser() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+
+    if (!name || !email || !password || !confirm) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    if (password !== confirm) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    fetch("/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Account created successfully");
+            window.location.href = "/";
+        } else {
+            alert("Signup failed");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

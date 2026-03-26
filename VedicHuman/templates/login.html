@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yoga At Ease – Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: #eef8f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 1000px;
+            height: 600px;
+            background: #ffffff;
+            border-radius: 24px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        /* LEFT IMAGE */
+        .left {
+            flex: 1;
+            background: url("{{ url_for('static', filename='yoga.jpg') }}") center/cover no-repeat;
+            position: relative;
+        }
+
+        .left::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.25);
+        }
+
+        .brand {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        /* RIGHT SIDE */
+        .right {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: #2e8b57;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #256f45;
+        }
+
+        .signup {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .signup a {
+            display: inline-block;
+            margin-top: 6px;
+            color: #2e8b57;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+        <div class="brand">Vedic Human - Yoga At Ease</div>
+    </div>
+
+    <div class="right">
+        <h2>Welcome Back</h2>
+        <p>Please login to your account</p>
+
+        <!-- NO FORM TAG (IMPORTANT) -->
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+
+        <button onclick="loginUser()">Login</button>
+
+        <div class="signup">
+            Don’t have an account?
+            <br>
+            <a href="/signup">Create Account</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function loginUser() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (email === "" || password === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = "/dashboard";
+        } else {
+            alert("Invalid email or password");
+        }
+    })
+    .catch(() => {
+        alert("Server error");
+    });
+}
+</script>
+
+</body>
+</html>
