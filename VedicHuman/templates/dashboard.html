@@ -1,329 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <title>Yoga Dashboard</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI';}
 
 body{
 background:#eef2ec;
 display:flex;
-height:100vh;
+transition:0.3s;
 }
 
-/* Sidebar */
-
 .sidebar{
-width:220px;
+width:230px;
 background:#f5f7f4;
-padding:25px;
-border-right:1px solid #e2e6df;
+padding:20px;
+border-right:1px solid #ddd;
 display:flex;
 flex-direction:column;
 justify-content:space-between;
+transition:0.3s;
 }
 
-.logo{
-font-size:20px;
-font-weight:600;
-color:#2f7d57;
-margin-bottom:25px;
+.main{flex:1;padding:30px;}
+
+/* DARK MODE */
+body.dark{background:#121212;color:#eee;}
+body.dark .sidebar{background:#1e1e1e;border-right:1px solid #333;}
+body.dark .card,body.dark .intro{background:#1f1f1f;color:#eee;}
+
+.sidebar-top{display:flex;justify-content:space-between;margin-bottom:20px;}
+.logo{font-weight:bold;color:#2f7d57;}
+
+.menu a{display:block;padding:12px;margin:10px 0;text-decoration:none;color:#444;border-radius:10px;}
+
+.logout{background:#e74c3c;color:white;border:none;padding:12px;border-radius:10px;}
+
+.header{display:flex;justify-content:space-between;margin-bottom:20px;}
+
+.intro{background:white;padding:18px;border-radius:12px;margin-bottom:20px;}
+
+.cards{display:grid;grid-template-columns:1.7fr 1fr;gap:25px;}
+
+.card{background:white;padding:25px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.05);}
+
+.session-img{width:100%;height:220px;border-radius:12px;object-fit:cover;margin-bottom:15px;}
+
+/* SESSION BOX */
+.session-box{
+margin-top:15px;
+padding:15px;
+border-radius:12px;
+background:linear-gradient(135deg,#f0f7f3,#e6f2ec);
 }
 
-.profile{
-margin-bottom:30px;
-font-size:15px;
+body.dark .session-box{
+background:linear-gradient(135deg,#1f1f1f,#2a2a2a);
 }
 
-.menu a{
-display:block;
-padding:12px;
-margin-bottom:8px;
-text-decoration:none;
-color:#444;
-border-radius:10px;
-}
-
-.menu a:hover{
-background:#e5efe7;
-}
-
-/* Logout */
-
-.logout{
-background:#e74c3c;
-color:white;
-border:none;
-padding:10px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.logout:hover{
-background:#c0392b;
-}
-
-/* Main */
-
-.main{
-flex:1;
-padding:40px;
-}
-
-/* Header */
-
-.header{
+.session-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:40px;
+margin-bottom:15px;
 }
 
-.header h1{
-font-size:28px;
+.start-btn{
+background:linear-gradient(135deg,#3d8b62,#66bb6a);
+border:none;
+padding:12px 20px;
+border-radius:25px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
 }
 
-.stats{
-color:#666;
-}
+.start-btn:hover{transform:scale(1.05);}
 
-/* Cards Layout */
-
-.cards{
-display:grid;
-grid-template-columns:1.5fr 1fr;
-gap:25px;
-height:75vh;
-}
-
-/* Start Session */
-
-.session-card{
-background:white;
-border-radius:18px;
-overflow:hidden;
-box-shadow:0 6px 20px rgba(0,0,0,0.05);
-height:100%;
+/* STREAK */
+.streak{
 display:flex;
-flex-direction:column;
-}
-
-.session-card img{
-width:100%;
-height:230px;
-object-fit:cover;
-}
-
-.session-content{
-padding:25px;
-flex:1;
-display:flex;
-flex-direction:column;
 justify-content:center;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap;
 }
 
-.session-content h2{
+.circle{
+width:36px;
+height:36px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+font-weight:bold;
+color:white;
+background:#ccc;
+}
+
+.circle.active:nth-child(1){background:#ff6b6b;}
+.circle.active:nth-child(2){background:#feca57;}
+.circle.active:nth-child(3){background:#48dbfb;}
+.circle.active:nth-child(4){background:#1dd1a1;}
+.circle.active:nth-child(5){background:#5f27cd;}
+.circle.active:nth-child(6){background:#ff9ff3;}
+.circle.active:nth-child(7){background:#54a0ff;}
+
+.circle.active{
+transform:scale(1.1);
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* PROGRESS */
+.circle-container{position:relative;width:180px;margin:auto;}
+.circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px;font-weight:bold;color:#3d8b62;}
+
+#progressCircle{
+transition: stroke-dashoffset 0.8s ease;
+}
+
+/* DROPDOWN */
+.progress-top{
+display:flex;
+justify-content:center;
 margin-bottom:10px;
 }
 
-.session-content p{
-color:#777;
-margin-bottom:20px;
+.progress-top select{
+padding:8px 12px;
+border-radius:8px;
+border:none;
+background:#f0f0f0;
+cursor:pointer;
+font-weight:500;
 }
 
-.btn{
-background:#3d8b62;
+body.dark .progress-top select{
+background:#2a2a2a;
 color:white;
-padding:14px;
+}
+
+/* SIDEBAR COLLAPSE */
+.sidebar.collapsed{width:80px;}
+.sidebar.collapsed .menu a span{display:none;}
+.sidebar.collapsed .logo{display:none;}
+.sidebar.collapsed .menu a{text-align:center;}
+
+/* THEME BUTTON */
+.theme-btn{
+width:45px;
+height:45px;
+border-radius:12px;
 border:none;
-border-radius:10px;
 cursor:pointer;
-width:100%;
-font-size:16px;
+font-size:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#f1f1f1,#e0e0e0);
 }
 
-.btn:hover{
-background:#2f6f50;
+body.dark .theme-btn{
+background:#2a2a2a;
+color:#fff;
 }
-
-/* Progress */
-
-.progress-card{
-background:white;
-border-radius:18px;
-padding:25px;
-box-shadow:0 6px 20px rgba(0,0,0,0.05);
-height:100%;
-}
-
-.progress-card h2{
-margin-bottom:20px;
-}
-
-.progress-item{
-margin-bottom:25px;
-}
-
-.bar{
-background:#e6ece4;
-height:10px;
-border-radius:10px;
-margin-top:8px;
-overflow:hidden;
-}
-
-.fill{
-background:#3d8b62;
-height:100%;
-}
-
-.view-btn{
-margin-top:20px;
-width:100%;
-background:#f0f5f1;
-color:#2f7d57;
-border:none;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-}
-
-.view-btn:hover{
-background:#e0ece3;
-}
-
 </style>
 </head>
 
-
 <body>
 
-<!-- Sidebar -->
-
 <div class="sidebar">
-
 <div>
-
+<div class="sidebar-top">
+<div onclick="toggleSidebar()">☰</div>
 <div class="logo">🌿 Vedic Human</div>
-
-<div class="profile">
-Welcome back, <b>{{name}}</b>
 </div>
 
 <div class="menu">
-<a href="#">Start Session</a>
-<a href="#">Progress</a>
-<a href="#">Pose Library</a>
+<a href="/session">🧘 <span>Session</span></a>
+<a href="#">📊 <span>Progress</span></a>
+<a href="#">📚 <span>Library</span></a>
+</div>
 </div>
 
-</div>
-
-<a href="/logout">
 <button class="logout">Logout</button>
-</a>
-
 </div>
-
-
-<!-- Main Content -->
 
 <div class="main">
 
 <div class="header">
-
-<h1 id="greeting"></h1>
-
-<div class="stats">
-🔥 7 Day Streak • 24 Sessions
+<h2 id="greeting"></h2>
+<button onclick="toggleDark()" class="theme-btn" id="themeToggle">🌙</button>
 </div>
 
+<div class="intro">
+🧘 Stay consistent. Your journey towards mindfulness begins today.
 </div>
-
 
 <div class="cards">
 
-<!-- Start Session -->
+<!-- SESSION CARD -->
+<div class="card">
+<img src="{{ url_for('static', filename='dash1.jpeg') }}" class="session-img">
 
-<div class="session-card">
+<div class="session-box">
+<div class="session-header">
+<div>
+<h3>Start Your Session</h3>
+<p>Relax • Focus • Breathe</p>
+</div>
+<button class="start-btn" onclick="startSession()">▶ Start</button>
+</div>
+</div>
+</div>
 
-<img src="https://images6.alphacoders.com/126/thumb-1920-1263719.jpg">
+<!-- PROGRESS CARD -->
+<div class="card">
 
-<div class="session-content">
+<div class="progress-top">
+<select id="progressType" onchange="changeProgress()">
+<option value="weekly">Weekly</option>
+<option value="monthly">Monthly</option>
+<option value="yearly">Yearly</option>
+</select>
+</div>
 
-<h2>Start Session</h2>
+<div class="circle-container">
+<svg width="180" height="180">
+<circle cx="90" cy="90" r="70" stroke="#e0e0e0" stroke-width="15" fill="none"/>
+<circle id="progressCircle" cx="90" cy="90" r="70"
+stroke="#3d8b62" stroke-width="15" fill="none"
+stroke-linecap="round"
+stroke-dasharray="440"
+stroke-dashoffset="440"/>
+</svg>
+<div class="circle-text" id="percentText">0%</div>
+</div>
 
-<p>Morning Flow • 20 min</p>
-
-<button onclick="window.location.href='/session'">
-▶ Begin Practice
-</button>
+<div class="streak" id="progressStreak"></div>
 
 </div>
 
 </div>
-
-
-<!-- Progress -->
-
-<div class="progress-card">
-
-<h2>Your Progress</h2>
-
-<div class="progress-item">
-Sessions This Week (4 / 5)
-
-<div class="bar">
-<div class="fill" style="width:80%"></div>
 </div>
-
-</div>
-
-<div class="progress-item">
-Total Minutes (80 / 100)
-
-<div class="bar">
-<div class="fill" style="width:80%"></div>
-</div>
-
-</div>
-
-<div class="progress-item">
-🔥 Current Streak: 7 days
-</div>
-
-<button class="view-btn">
-View More →
-</button>
-
-</div>
-
-</div>
-
-</div>
-
 
 <script>
 
-/* Greeting based on time */
+// DARK MODE
+function toggleDark(){
+document.body.classList.toggle("dark");
+let btn=document.getElementById("themeToggle");
+btn.innerText=document.body.classList.contains("dark")?"☀️":"🌙";
+}
 
-const hour = new Date().getHours();
-let greeting = "Hello";
+// SIDEBAR
+function toggleSidebar(){
+document.querySelector(".sidebar").classList.toggle("collapsed");
+}
 
-if(hour < 12) greeting = "Good Morning";
-else if(hour < 18) greeting = "Good Afternoon";
-else greeting = "Good Evening";
+// GREETING
+let h=new Date().getHours();
+let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";
+document.getElementById("greeting").innerText=g+", {{name}}";
 
-document.getElementById("greeting").innerText =
-greeting + ", {{name}} ";
+// START
+function startSession(){
+window.location.href="/session";
+}
+
+// PROGRESS
+let radius=70;
+let circumference=2*Math.PI*radius;
+
+function animateProgress(p){
+let c=document.getElementById("progressCircle");
+let t=document.getElementById("percentText");
+let cur=0;
+
+let i=setInterval(()=>{
+if(cur>=p){clearInterval(i);}
+else{
+cur++;
+c.style.strokeDashoffset=circumference-(cur/100)*circumference;
+t.innerText=cur+"%";
+}
+},10);
+}
+
+// STREAK
+let container=document.getElementById("progressStreak");
+
+function renderStreak(d){
+container.innerHTML="";
+for(let i=1;i<=7;i++){
+let el=document.createElement("div");
+el.className="circle";
+if(i<=d) el.classList.add("active");
+el.innerText=i;
+container.appendChild(el);
+}
+}
+
+// DROPDOWN
+function changeProgress(){
+let v=document.getElementById("progressType").value;
+
+if(v==="weekly"){renderStreak(5);animateProgress(67);}
+else if(v==="monthly"){renderStreak(6);animateProgress(80);}
+else{renderStreak(7);animateProgress(95);}
+}
+
+// LOAD
+window.onload=()=>{
+renderStreak(5);
+animateProgress(67);
+};
 
 </script>
 
