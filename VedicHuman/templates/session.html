@@ -101,7 +101,7 @@ body {
 .btn:hover { background: #2f6f50; }
 button:hover { background: #245f43 !important; }
 .btn-stop { background: #c0392b; margin-left: 10px; }
-.btn-stop:hover { background: #a93226; }
+.btn-stop:hover { background: #a93226 !important; }
 .image-box {
   flex: 1;
   background: white;
@@ -120,18 +120,19 @@ button:hover { background: #245f43 !important; }
 
 <div class="header">
   <div style="display:flex; align-items:center; gap:15px;">
-   <button onclick="window.location.href='/dashboard'" style="
-  display:flex; align-items:center; gap:8px;
-  background:#2f7d57; color:white;
-  border:none; border-radius:8px;
-  padding:8px 16px; cursor:pointer;
-  font-size:14px; font-weight:bold;
-  transition: background 0.2s;">
-  ←
-</button>
+    <button onclick="window.location.href='/dashboard'" style="
+      display:flex; align-items:center; gap:8px;
+      background:#2f7d57; color:white;
+      border:none; border-radius:8px;
+      padding:8px 16px; cursor:pointer;
+      font-size:14px; font-weight:bold;
+      transition: background 0.2s;">
+      ← Back
+    </button>
     <h2 style="margin:0;">🌿 Yoga Session</h2>
   </div>
   <select id="pose-select" onchange="changePose()">
+    <option value="namaste">Namaste Pose</option>
     <option value="tree">Tree Pose</option>
     <option value="warrior">Warrior Pose</option>
     <option value="mountain">Mountain Pose</option>
@@ -180,6 +181,17 @@ button:hover { background: #245f43 !important; }
 <script>
 // ─── POSE DATA ───────────────────────────────────────────────
 const POSES = {
+  namaste: {
+    label: "Namaste Pose",
+    image: "/static/yoga.jpg",
+    instructions: [
+      "Stand straight with feet together.",
+      "Join both hands at chest level in prayer position.",
+      "Keep elbows slightly bent and relaxed.",
+      "Close your eyes and breathe slowly.",
+      "Hold the pose and stay balanced."
+    ]
+  },
   tree: {
     label: "Tree Pose",
     image: "/static/tree.jpg",
@@ -218,7 +230,7 @@ const POSES = {
 // ─── STATE ───────────────────────────────────────────────────
 let detector, video, canvas, ctx, stream;
 let animationId = null;
-let currentPose = "tree";
+let currentPose = "namaste";
 let holdStart   = null;
 let holdTime    = 0;
 let bestTime    = 0;
@@ -228,13 +240,14 @@ window.onload = () => {
   video  = document.getElementById("video");
   canvas = document.getElementById("canvas");
   ctx    = canvas.getContext("2d");
-  loadPoseUI("tree");
+  // dropdown ki value se load karo — hardcoded nahi
+  currentPose = document.getElementById("pose-select").value;
+  loadPoseUI(currentPose);
 };
 
 function changePose() {
   currentPose = document.getElementById("pose-select").value;
   loadPoseUI(currentPose);
-  // reset timers on pose change
   holdStart = null;
   holdTime  = 0;
   bestTime  = 0;
@@ -244,18 +257,19 @@ function changePose() {
 
 function loadPoseUI(key) {
   const p = POSES[key];
-  document.getElementById("pose-img").src       = p.image;
-  document.getElementById("pose-label").textContent = p.label;
+  document.getElementById("pose-img").src            = p.image;
+  document.getElementById("pose-label").textContent  = p.label;
   const ul = document.getElementById("instruction-list");
   ul.innerHTML = p.instructions.map(i => `<li>${i}</li>`).join("");
 }
 
 // ─── CAMERA ──────────────────────────────────────────────────
 async function startPose() {
+  document.getElementById("start-btn").textContent = "⏳ Loading model...";
+  document.getElementById("start-btn").disabled    = true;
+
   document.getElementById("camera-area").style.display = "block";
   document.getElementById("timer-box").style.display   = "block";
-  document.getElementById("start-btn").style.display   = "none";
-  document.getElementById("stop-btn").style.display    = "inline-block";
 
   stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
   video.srcObject = stream;
@@ -269,9 +283,35 @@ async function startPose() {
     modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING
   });
 
+  // model load hone ke baad button reset karo
+  document.getElementById("start-btn").textContent = "▶️ Start Pose";
+  document.getElementById("start-btn").disabled    = false;
+  document.getElementById("start-btn").style.display = "none";
+  document.getElementById("stop-btn").style.display  = "inline-block";
+
   detectPose();
 }
 
+// ─── SESSION UPDATE ──────────────────────────────────────────
+function startSession() {
+  fetch("/start-session", {
+    method: "POST",
+    credentials: "include"  // Flask session cookie bhejna zaroori
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Great job! Session Completed ✅");
+      window.location.href = "/dashboard";  // automatically dashboard pe redirect
+    }
+  })
+  .catch(err => {
+    console.error("Session update failed:", err);
+    window.location.href = "/dashboard";  // error pe bhi dashboard pe bhejo
+  });
+}
+
+// ─── STOP CAMERA ─────────────────────────────────────────────
 function stopCamera() {
   if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
   if (video)  { video.pause(); video.srcObject = null; }
@@ -282,11 +322,13 @@ function stopCamera() {
   document.getElementById("timer-box").style.display   = "none";
   document.getElementById("start-btn").style.display   = "inline-block";
   document.getElementById("stop-btn").style.display    = "none";
+
+  // DB update + redirect
+  startSession();
 }
 
 // ─── ANGLE HELPER ────────────────────────────────────────────
 function getAngle(A, B, C) {
-  // Angle at point B between A-B-C
   const AB = { x: A.x - B.x, y: A.y - B.y };
   const CB = { x: C.x - B.x, y: C.y - B.y };
   const dot = AB.x * CB.x + AB.y * CB.y;
@@ -295,10 +337,23 @@ function getAngle(A, B, C) {
 }
 
 // ─── POSE CHECKERS ───────────────────────────────────────────
+function checkNamaste(kp) {
+  const lShoulder=kp[5], rShoulder=kp[6];
+  const lWrist=kp[9], rWrist=kp[10];
+
+  if ([lShoulder, rShoulder, lWrist, rWrist]
+      .some(p => p.score < 0.4)) return false;
+
+  const chestY        = (lShoulder.y + rShoulder.y) / 2;
+  const estimatedHipY = chestY + 200;  // hips visible na ho toh estimate
+
+  const wristsAtChest = lWrist.y > chestY && lWrist.y < estimatedHipY &&
+                        rWrist.y > chestY && rWrist.y < estimatedHipY;
+
+  return wristsAtChest;
+}
+
 function checkTree(kp) {
-  // kp indices: 5=leftShoulder,6=rightShoulder,7=leftElbow,8=rightElbow
-  // 9=leftWrist,10=rightWrist,11=leftHip,12=rightHip
-  // 13=leftKnee,14=rightKnee,15=leftAnkle,16=rightAnkle
   const lHip=kp[11], rHip=kp[12], lKnee=kp[13], rKnee=kp[14];
   const lAnkle=kp[15], rAnkle=kp[16];
   const lShoulder=kp[5], rShoulder=kp[6], lWrist=kp[9], rWrist=kp[10];
@@ -306,15 +361,11 @@ function checkTree(kp) {
   if ([lHip,rHip,lKnee,rKnee,lAnkle,rAnkle,lShoulder,rShoulder,lWrist,rWrist]
       .some(p => p.score < 0.4)) return false;
 
-  // One knee must be significantly bent (angle < 120°)
   const leftKneeAngle  = getAngle(lHip, lKnee, lAnkle);
   const rightKneeAngle = getAngle(rHip, rKnee, rAnkle);
-  const oneLegBent = leftKneeAngle < 120 || rightKneeAngle < 120;
-
-  // Standing leg straight (> 155°)
+  const oneLegBent       = leftKneeAngle < 120 || rightKneeAngle < 120;
   const standingStraight = leftKneeAngle > 155 || rightKneeAngle > 155;
 
-  // Both wrists near chest (between shoulder y and hip y)
   const chestY = (lShoulder.y + rShoulder.y) / 2;
   const hipY   = (lHip.y + rHip.y) / 2;
   const wristsAtChest = lWrist.y > chestY && lWrist.y < hipY &&
@@ -331,21 +382,17 @@ function checkWarrior(kp) {
   if ([lHip,rHip,lKnee,rKnee,lAnkle,rAnkle,lShoulder,rShoulder,lWrist,rWrist]
       .some(p => p.score < 0.4)) return false;
 
-  // One knee bent (80°–120°), other leg straight (>150°)
   const leftKneeAngle  = getAngle(lHip, lKnee, lAnkle);
   const rightKneeAngle = getAngle(rHip, rKnee, rAnkle);
-  const frontKneeBent  = (leftKneeAngle > 70 && leftKneeAngle < 125) ||
-                         (rightKneeAngle > 70 && rightKneeAngle < 125);
+  const frontKneeBent   = (leftKneeAngle > 70 && leftKneeAngle < 125) ||
+                          (rightKneeAngle > 70 && rightKneeAngle < 125);
   const backLegStraight = leftKneeAngle > 150 || rightKneeAngle > 150;
 
-  // Both arms horizontal — wrists near shoulder height (within 80px)
-  const shoulderY = (lShoulder.y + rShoulder.y) / 2;
-  const armsOut   = Math.abs(lWrist.y - shoulderY) < 80 &&
-                    Math.abs(rWrist.y - shoulderY) < 80;
-
-  // Wrists spread wide (x distance > shoulder width * 2)
+  const shoulderY    = (lShoulder.y + rShoulder.y) / 2;
+  const armsOut      = Math.abs(lWrist.y - shoulderY) < 80 &&
+                       Math.abs(rWrist.y - shoulderY) < 80;
   const shoulderWidth = Math.abs(lShoulder.x - rShoulder.x);
-  const armsWide = Math.abs(lWrist.x - rWrist.x) > shoulderWidth * 1.8;
+  const armsWide     = Math.abs(lWrist.x - rWrist.x) > shoulderWidth * 1.8;
 
   return frontKneeBent && backLegStraight && armsOut && armsWide;
 }
@@ -358,24 +405,20 @@ function checkMountain(kp) {
   if ([lShoulder,rShoulder,lHip,rHip,lKnee,rKnee,lAnkle,rAnkle,lWrist,rWrist]
       .some(p => p.score < 0.4)) return false;
 
-  // Both legs straight (>160°)
   const leftKneeAngle  = getAngle(lHip, lKnee, lAnkle);
   const rightKneeAngle = getAngle(rHip, rKnee, rAnkle);
   const legsStraight   = leftKneeAngle > 160 && rightKneeAngle > 160;
-
-  // Both wrists above shoulders
-  const wristsUp = lWrist.y < lShoulder.y && rWrist.y < rShoulder.y;
-
-  // Wrists close together above head (within 80px horizontally)
+  const wristsUp       = lWrist.y < lShoulder.y && rWrist.y < rShoulder.y;
   const wristsTogether = Math.abs(lWrist.x - rWrist.x) < 100;
 
   return legsStraight && wristsUp && wristsTogether;
 }
 
 function isPoseCorrect(kp) {
-  if (currentPose === "tree")     return checkTree(kp);
-  if (currentPose === "warrior")  return checkWarrior(kp);
-  if (currentPose === "mountain") return checkMountain(kp);
+  if (currentPose === "namaste") return checkNamaste(kp);
+  if (currentPose === "tree")    return checkTree(kp);
+  if (currentPose === "warrior") return checkWarrior(kp);
+  if (currentPose === "mountain")return checkMountain(kp);
   return false;
 }
 
@@ -426,19 +469,18 @@ async function detectPose() {
     const color   = correct ? "#00e676" : "#ff1744";
     drawSkeleton(kp, color);
 
-    // Timer logic
     const now = performance.now();
     if (correct) {
       if (!holdStart) holdStart = now;
       holdTime = (now - holdStart) / 1000;
       if (holdTime > bestTime) bestTime = holdTime;
-      document.getElementById("pose-status").style.color = "#2f7d57";
-      document.getElementById("pose-status").textContent = "✅ Pose Correct! Keep holding...";
+      document.getElementById("pose-status").style.color   = "#2f7d57";
+      document.getElementById("pose-status").textContent   = "✅ Pose Correct! Keep holding...";
     } else {
       holdStart = null;
       holdTime  = 0;
-      document.getElementById("pose-status").style.color = "#c0392b";
-      document.getElementById("pose-status").textContent = "❌ Adjust your pose...";
+      document.getElementById("pose-status").style.color   = "#c0392b";
+      document.getElementById("pose-status").textContent   = "❌ Adjust your pose...";
     }
 
     document.getElementById("hold-timer").textContent = holdTime.toFixed(1) + "s";
