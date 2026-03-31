@@ -40,8 +40,8 @@ The system analyzes user posture using AI pose detection and provides accuracy s
 - SQLite / MySQL  
 
 ### AI / Computer Vision
-- OpenCV  
-- MediaPipe / MoveNet  
+- Web cam
+- MoveNet  
 
 ---
 
@@ -96,7 +96,9 @@ VedicHuman/
 ---
 
 ## 👩‍💻 Developed By
-- Natasha  
+- Natasha Pundir 
+- Aanvi Rawat
+- Sakshi
 
 ---
 
