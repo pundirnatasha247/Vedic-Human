@@ -13,6 +13,7 @@ display:flex;
 transition:0.3s;
 }
 
+/* SIDEBAR */
 .sidebar{
 width:230px;
 background:#f5f7f4;
@@ -21,7 +22,7 @@ border-right:1px solid #ddd;
 display:flex;
 flex-direction:column;
 justify-content:space-between;
-transition:0.3s;
+height:100vh;
 }
 
 .main{flex:1;padding:30px;}
@@ -31,22 +32,84 @@ body.dark{background:#121212;color:#eee;}
 body.dark .sidebar{background:#1e1e1e;border-right:1px solid #333;}
 body.dark .card,body.dark .intro{background:#1f1f1f;color:#eee;}
 
-.sidebar-top{display:flex;justify-content:space-between;margin-bottom:20px;}
-.logo{font-weight:bold;color:#2f7d57;}
+.sidebar-top{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
 
-.menu a{display:block;padding:12px;margin:10px 0;text-decoration:none;color:#444;border-radius:10px;}
+.logo{
+font-weight:bold;
+color:#2f7d57;
+}
 
-.logout{background:#e74c3c;color:white;border:none;padding:12px;border-radius:10px;}
+/* MENU */
+.menu a{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px;
+margin:10px 0;
+text-decoration:none;
+color:#444;
+border-radius:10px;
+transition:0.3s;
+}
 
-.header{display:flex;justify-content:space-between;margin-bottom:20px;}
+.menu a:hover{
+background:#e8f5ee;
+transform:translateX(5px);
+}
 
-.intro{background:white;padding:18px;border-radius:12px;margin-bottom:20px;}
+body.dark .menu a:hover{
+background:#2a2a2a;
+}
 
-.cards{display:grid;grid-template-columns:1.7fr 1fr;gap:25px;}
+/* LOGOUT */
+.logout{
+background:#e74c3c;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+width:100%;
+}
 
-.card{background:white;padding:25px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.05);}
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
 
-.session-img{width:100%;height:220px;border-radius:12px;object-fit:cover;margin-bottom:15px;}
+.intro{
+background:white;
+padding:18px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:1.7fr 1fr;
+gap:25px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+.session-img{
+width:100%;
+height:220px;
+border-radius:12px;
+object-fit:cover;
+margin-bottom:15px;
+}
 
 /* SESSION BOX */
 .session-box{
@@ -78,7 +141,9 @@ cursor:pointer;
 transition:0.3s;
 }
 
-.start-btn:hover{transform:scale(1.05);}
+.start-btn:hover{
+transform:scale(1.05);
+}
 
 /* STREAK */
 .streak{
@@ -116,11 +181,20 @@ box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* PROGRESS */
-.circle-container{position:relative;width:180px;margin:auto;}
-.circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px;font-weight:bold;color:#3d8b62;}
+.circle-container{
+position:relative;
+width:180px;
+margin:auto;
+}
 
-#progressCircle{
-transition: stroke-dashoffset 0.8s ease;
+.circle-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:24px;
+font-weight:bold;
+color:#3d8b62;
 }
 
 /* DROPDOWN */
@@ -136,7 +210,6 @@ border-radius:8px;
 border:none;
 background:#f0f0f0;
 cursor:pointer;
-font-weight:500;
 }
 
 body.dark .progress-top select{
@@ -173,23 +246,29 @@ color:#fff;
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
+
 <div>
-<div class="sidebar-top">
-<div onclick="toggleSidebar()">☰</div>
-<div class="logo">🌿 Vedic Human</div>
+    <div class="sidebar-top">
+        <div onclick="toggleSidebar()">☰</div>
+        <div class="logo">🌿 Vedic Human</div>
+    </div>
+
+    <div class="menu">
+        <a href="/session">🧘 <span>Session</span></a>
+        <a href="#">📊 <span>Progress</span></a>
+        <a href="#">🏆 <span>Challenges</span></a>
+        <a href="#">🎁 <span>Rewards</span></a>
+        <a href="#">📚 <span>Library</span></a>
+    </div>
 </div>
 
-<div class="menu">
-<a href="/session">🧘 <span>Session</span></a>
-<a href="#">📊 <span>Progress</span></a>
-<a href="#">📚 <span>Library</span></a>
-</div>
+<button class="logout" onclick="window.location.href='/logout'">Logout</button>
+
 </div>
 
-<button class="logout">Logout</button>
-</div>
-
+<!-- MAIN -->
 <div class="main">
 
 <div class="header">
@@ -203,7 +282,7 @@ color:#fff;
 
 <div class="cards">
 
-<!-- SESSION CARD -->
+<!-- SESSION -->
 <div class="card">
 <img src="{{ url_for('static', filename='dash1.jpeg') }}" class="session-img">
 
@@ -218,7 +297,7 @@ color:#fff;
 </div>
 </div>
 
-<!-- PROGRESS CARD -->
+<!-- PROGRESS -->
 <div class="card">
 
 <div class="progress-top">
@@ -254,7 +333,14 @@ stroke-dashoffset="440"/>
 function toggleDark(){
 document.body.classList.toggle("dark");
 let btn=document.getElementById("themeToggle");
-btn.innerText=document.body.classList.contains("dark")?"☀️":"🌙";
+
+if(document.body.classList.contains("dark")){
+    btn.innerHTML="☀️";
+    localStorage.setItem("theme","dark");
+}else{
+    btn.innerHTML="🌙";
+    localStorage.setItem("theme","light");
+}
 }
 
 // SIDEBAR
@@ -303,15 +389,6 @@ if(i<=d) el.classList.add("active");
 el.innerText=i;
 container.appendChild(el);
 }
-}
-
-// DROPDOWN
-function changeProgress(){
-let v=document.getElementById("progressType").value;
-
-if(v==="weekly"){renderStreak(5);animateProgress(67);}
-else if(v==="monthly"){renderStreak(6);animateProgress(80);}
-else{renderStreak(7);animateProgress(95);}
 }
 
 // LOAD
