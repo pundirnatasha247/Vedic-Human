@@ -8,9 +8,15 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI';}
 
 body{
-background:#eef2ec;
 display:flex;
+background:#eef2ec;
 transition:0.3s;
+}
+
+/* DARK MODE */
+body.dark{
+background:#121212;
+color:#eee;
 }
 
 /* SIDEBAR */
@@ -23,49 +29,45 @@ display:flex;
 flex-direction:column;
 justify-content:space-between;
 height:100vh;
+transition:0.3s;
 }
 
-.main{flex:1;padding:30px;}
+body.dark .sidebar{background:#1e1e1e;}
 
-/* DARK MODE */
-body.dark{background:#121212;color:#eee;}
-body.dark .sidebar{background:#1e1e1e;border-right:1px solid #333;}
-body.dark .card,body.dark .intro{background:#1f1f1f;color:#eee;}
+.sidebar.collapsed{width:80px;}
+.sidebar.collapsed span,
+.sidebar.collapsed .logo{display:none;}
+.sidebar.collapsed .nav-link{justify-content:center;}
 
 .sidebar-top{
 display:flex;
 justify-content:space-between;
 margin-bottom:20px;
+cursor:pointer;
 }
 
-.logo{
-font-weight:bold;
-color:#2f7d57;
-}
+.logo{font-weight:bold;color:#2f7d57;}
 
-/* MENU */
-.menu a{
+.nav-link{
 display:flex;
-align-items:center;
 gap:10px;
 padding:12px;
-margin:10px 0;
+margin:8px 0;
 text-decoration:none;
 color:#444;
 border-radius:10px;
-transition:0.3s;
 }
 
-.menu a:hover{
-background:#e8f5ee;
-transform:translateX(5px);
+.nav-link:hover{background:#e8f5ee;}
+
+.nav-link.active{
+background:#dff3ea;
+font-weight:bold;
 }
 
-body.dark .menu a:hover{
-background:#2a2a2a;
-}
+body.dark .nav-link{color:#eee;}
+body.dark .nav-link.active{background:#2a2a2a;}
 
-/* LOGOUT */
 .logout{
 background:#e74c3c;
 color:white;
@@ -76,170 +78,119 @@ cursor:pointer;
 width:100%;
 }
 
-/* HEADER */
+/* MAIN */
+.main{flex:1;padding:30px;}
+
 .header{
 display:flex;
 justify-content:space-between;
+align-items:center;
 margin-bottom:20px;
+}
+
+.header button{
+border:none;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+background:#eee;
+}
+
+body.dark .header button{
+background:#2a2a2a;
+color:white;
 }
 
 .intro{
 background:white;
-padding:18px;
-border-radius:12px;
+padding:15px;
+border-radius:10px;
 margin-bottom:20px;
 }
 
+body.dark .intro{background:#1f1f1f;}
+
 .cards{
 display:grid;
-grid-template-columns:1.7fr 1fr;
-gap:25px;
+grid-template-columns:2fr 1fr;
+gap:20px;
 }
 
 .card{
 background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
+padding:20px;
+border-radius:12px;
 }
 
+body.dark .card{background:#1f1f1f;}
+
+.sidebar {
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar.collapsed span {
+    display: none;
+}
+
+/* SESSION */
 .session-img{
 width:100%;
-height:220px;
-border-radius:12px;
+height:200px;
+border-radius:10px;
 object-fit:cover;
-margin-bottom:15px;
-}
-
-/* SESSION BOX */
-.session-box{
-margin-top:15px;
-padding:15px;
-border-radius:12px;
-background:linear-gradient(135deg,#f0f7f3,#e6f2ec);
-}
-
-body.dark .session-box{
-background:linear-gradient(135deg,#1f1f1f,#2a2a2a);
-}
-
-.session-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:15px;
-}
-
-.start-btn{
-background:linear-gradient(135deg,#3d8b62,#66bb6a);
-border:none;
-padding:12px 20px;
-border-radius:25px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.start-btn:hover{
-transform:scale(1.05);
-}
-
-/* STREAK */
-.streak{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:20px;
-flex-wrap:wrap;
-}
-
-.circle{
-width:36px;
-height:36px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:14px;
-font-weight:bold;
-color:white;
-background:#ccc;
-}
-
-.circle.active:nth-child(1){background:#ff6b6b;}
-.circle.active:nth-child(2){background:#feca57;}
-.circle.active:nth-child(3){background:#48dbfb;}
-.circle.active:nth-child(4){background:#1dd1a1;}
-.circle.active:nth-child(5){background:#5f27cd;}
-.circle.active:nth-child(6){background:#ff9ff3;}
-.circle.active:nth-child(7){background:#54a0ff;}
-
-.circle.active{
-transform:scale(1.1);
-box-shadow:0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* PROGRESS */
-.circle-container{
-position:relative;
-width:180px;
-margin:auto;
-}
-
-.circle-text{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:24px;
-font-weight:bold;
-color:#3d8b62;
-}
-
-/* DROPDOWN */
-.progress-top{
-display:flex;
-justify-content:center;
 margin-bottom:10px;
 }
 
-.progress-top select{
-padding:8px 12px;
-border-radius:8px;
-border:none;
-background:#f0f0f0;
-cursor:pointer;
+.session-box{
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-body.dark .progress-top select{
-background:#2a2a2a;
+.start-btn{
+background:#3d8b62;
 color:white;
+border:none;
+padding:10px 20px;
+border-radius:20px;
+cursor:pointer;
 }
 
-/* SIDEBAR COLLAPSE */
-.sidebar.collapsed{width:80px;}
-.sidebar.collapsed .menu a span{display:none;}
-.sidebar.collapsed .logo{display:none;}
-.sidebar.collapsed .menu a{text-align:center;}
+/* CALENDAR */
+#calendar{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:8px;
+margin-top:10px;
+}
 
-/* THEME BUTTON */
-.theme-btn{
-width:45px;
-height:45px;
-border-radius:12px;
-border:none;
-cursor:pointer;
-font-size:18px;
+.day{
+width:34px;
+height:34px;
+border-radius:8px;
+background:#ddd;
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(135deg,#f1f1f1,#e0e0e0);
+font-size:12px;
+color:#555;
 }
 
-body.dark .theme-btn{
-background:#2a2a2a;
-color:#fff;
+.day.active{
+background:#3d8b62;
+color:white;
+font-weight:bold;
+}
+
+#monthLabel{
+font-size:14px;
+color:#777;
+margin-bottom:8px;
 }
 </style>
 </head>
@@ -250,21 +201,19 @@ color:#fff;
 <div class="sidebar">
 
 <div>
-    <div class="sidebar-top">
-        <div onclick="toggleSidebar()">☰</div>
-        <div class="logo">🌿 Vedic Human</div>
-    </div>
-
-    <div class="menu">
-        <a href="/session">🧘 <span>Session</span></a>
-        <a href="#">📊 <span>Progress</span></a>
-        <a href="#">🏆 <span>Challenges</span></a>
-        <a href="#">🎁 <span>Rewards</span></a>
-        <a href="#">📚 <span>Library</span></a>
-    </div>
+<div class="sidebar-top">
+<div onclick="toggleSidebar()">☰</div>
+<div class="logo">🌿 Vedic Human</div>
 </div>
 
-<button class="logout" onclick="window.location.href='/logout'">Logout</button>
+<div>
+<a href="/session" class="nav-link">🧘 <span>Session</span></a>
+<a href="/dashboard" class="nav-link">📊 <span>Progress</span></a>
+<a href="/library" class="nav-link">📚 <span>Library</span></a>
+</div>
+</div>
+
+<button class="logout" onclick="logoutUser()">Logout</button>
 
 </div>
 
@@ -273,55 +222,37 @@ color:#fff;
 
 <div class="header">
 <h2 id="greeting"></h2>
-<button onclick="toggleDark()" class="theme-btn" id="themeToggle">🌙</button>
+
+<div style="display:flex;gap:10px;">
+<button onclick="goToLibrary()">📚 Read</button>
+<button onclick="toggleDark()" id="themeToggle">🌙</button>
+</div>
 </div>
 
 <div class="intro">
-🧘 Stay consistent. Your journey towards mindfulness begins today.
+Stay consistent. Your journey towards mindfulness begins today.
 </div>
 
 <div class="cards">
 
-<!-- SESSION -->
+<!-- LEFT -->
 <div class="card">
 <img src="{{ url_for('static', filename='dash1.jpeg') }}" class="session-img">
 
 <div class="session-box">
-<div class="session-header">
 <div>
 <h3>Start Your Session</h3>
 <p>Relax • Focus • Breathe</p>
 </div>
-<button class="start-btn" onclick="startSession()">▶ Start</button>
-</div>
+<button class="start-btn" onclick="startSession()">Start</button>
 </div>
 </div>
 
-<!-- PROGRESS -->
+<!-- RIGHT -->
 <div class="card">
-
-<div class="progress-top">
-<select id="progressType" onchange="changeProgress()">
-<option value="weekly">Weekly</option>
-<option value="monthly">Monthly</option>
-<option value="yearly">Yearly</option>
-</select>
-</div>
-
-<div class="circle-container">
-<svg width="180" height="180">
-<circle cx="90" cy="90" r="70" stroke="#e0e0e0" stroke-width="15" fill="none"/>
-<circle id="progressCircle" cx="90" cy="90" r="70"
-stroke="#3d8b62" stroke-width="15" fill="none"
-stroke-linecap="round"
-stroke-dasharray="440"
-stroke-dashoffset="440"/>
-</svg>
-<div class="circle-text" id="percentText">0%</div>
-</div>
-
-<div class="streak" id="progressStreak"></div>
-
+<h3>📅 Your Consistency Calendar</h3>
+<div id="monthLabel"></div>
+<div id="calendar"></div>
 </div>
 
 </div>
@@ -329,23 +260,37 @@ stroke-dashoffset="440"/>
 
 <script>
 
-// DARK MODE
-function toggleDark(){
-document.body.classList.toggle("dark");
-let btn=document.getElementById("themeToggle");
-
-if(document.body.classList.contains("dark")){
-    btn.innerHTML="☀️";
-    localStorage.setItem("theme","dark");
-}else{
-    btn.innerHTML="🌙";
-    localStorage.setItem("theme","light");
-}
-}
-
 // SIDEBAR
 function toggleSidebar(){
 document.querySelector(".sidebar").classList.toggle("collapsed");
+}
+
+
+
+// LOGOUT
+function logoutUser(){
+fetch("/logout").then(()=>window.location.href="/");
+}
+
+// DARK MODE
+function toggleDark(){
+let body=document.body;
+let btn=document.getElementById("themeToggle");
+
+body.classList.toggle("dark");
+
+if(body.classList.contains("dark")){
+btn.innerText="☀️";
+localStorage.setItem("theme","dark");
+}else{
+btn.innerText="🌙";
+localStorage.setItem("theme","light");
+}
+}
+
+// LIBRARY
+function goToLibrary(){
+window.location.href="/library";
 }
 
 // GREETING
@@ -353,48 +298,80 @@ let h=new Date().getHours();
 let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";
 document.getElementById("greeting").innerText=g+", {{name}}";
 
-// START
+// SESSION
 function startSession(){
-window.location.href="/session";
+fetch("/start-session",{method:"POST"})
+.then(()=>window.location.href="/session");
 }
 
-// PROGRESS
-let radius=70;
-let circumference=2*Math.PI*radius;
+// CALENDAR (FIXED)
+function renderCalendar(dates){
 
-function animateProgress(p){
-let c=document.getElementById("progressCircle");
-let t=document.getElementById("percentText");
-let cur=0;
+let container=document.getElementById("calendar");
+let label=document.getElementById("monthLabel");
 
-let i=setInterval(()=>{
-if(cur>=p){clearInterval(i);}
-else{
-cur++;
-c.style.strokeDashoffset=circumference-(cur/100)*circumference;
-t.innerText=cur+"%";
-}
-},10);
-}
-
-// STREAK
-let container=document.getElementById("progressStreak");
-
-function renderStreak(d){
 container.innerHTML="";
-for(let i=1;i<=7;i++){
+if(!dates) dates=[];
+
+let today=new Date();
+let year=today.getFullYear();
+let month=today.getMonth();
+
+label.innerText=today.toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+
+// first day alignment
+let firstDay=new Date(year,month,1).getDay();
+
+// total days
+let totalDays=new Date(year,month+1,0).getDate();
+
+// empty boxes
+for(let i=0;i<firstDay;i++){
+let empty=document.createElement("div");
+container.appendChild(empty);
+}
+
+// actual days
+for(let d=1;d<=totalDays;d++){
+
+let fullDate=new Date(year,month,d).toISOString().split("T")[0];
+
 let el=document.createElement("div");
-el.className="circle";
-if(i<=d) el.classList.add("active");
-el.innerText=i;
+el.className="day";
+el.innerText=d;
+
+if(dates.includes(fullDate)){
+el.classList.add("active");
+}
+
 container.appendChild(el);
 }
 }
 
 // LOAD
 window.onload=()=>{
-renderStreak(5);
-animateProgress(67);
+
+// theme
+let saved=localStorage.getItem("theme");
+if(saved==="dark"){
+document.body.classList.add("dark");
+document.getElementById("themeToggle").innerText="☀️";
+}
+
+// calendar
+fetch("/get_dashboard_data")
+.then(res=>res.json())
+.then(data=>{
+renderCalendar(data.dates);
+});
+
+// active nav
+let path=window.location.pathname;
+document.querySelectorAll(".nav-link").forEach(link=>{
+if(link.getAttribute("href")===path){
+link.classList.add("active");
+}
+});
 };
 
 </script>
