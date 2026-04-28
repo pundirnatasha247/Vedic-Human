@@ -62,8 +62,10 @@ main{max-width:1400px;margin:0 auto;padding:3rem 2rem;position:relative;z-index:
 .detail-item span{font-size:.85rem;color:#666}
 .card-description{font-size:.9rem;color:#777;line-height:1.6;margin-bottom:1.5rem}
 .start-btn{width:100%;padding:1rem;background:linear-gradient(135deg,#4a7c59,#2d5a3d);color:#fff;border:none;border-radius:15px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;justify-content:center;gap:.5rem}
-.start-btn:hover{background:linear-gradient(135deg,#2d5a3d,#1a3d28);box-shadow:0 5px 20px rgba(45,90,61,.4);transform:translateY(-2px)}
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:1000;padding:2rem;overflow-y:auto}
+.start-btn:hover{background:linear-gradient(135deg,#2d5a3d,#1a3d28);box-shadow:0 5px 20px rgba(45,90,61,.4);
+  transform:translateY(-2px)}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);display:none;justify-content:center;
+  align-items:center;z-index:1000;padding:2rem;overflow-y:auto}
 .modal-overlay.active{display:flex}
 .modal{background:#fff;border-radius:30px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:modalIn .4s ease;box-shadow:0 25px 80px rgba(0,0,0,.3)}
 @keyframes modalIn{from{opacity:0;transform:translateY(-50px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -76,7 +78,8 @@ main{max-width:1400px;margin:0 auto;padding:3rem 2rem;position:relative;z-index:
 .modal-sanskrit{font-size:1.1rem;opacity:.9;font-style:italic}
 .modal-body{padding:2rem}
 .modal-section{margin-bottom:2rem}
-.modal-section h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:#2d5a3d;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.modal-section h3{font-family:'Playfair Display',serif;font-size:1.4rem;
+color:#2d5a3d;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
 .modal-section h3 i{color:#d4a843}
 .modal-section p{color:#666;line-height:1.8;font-size:1rem}
 .benefits-list{list-style:none}
@@ -84,7 +87,8 @@ main{max-width:1400px;margin:0 auto;padding:3rem 2rem;position:relative;z-index:
 .benefits-list li:last-child{border-bottom:none}
 .benefits-list li::before{content:'✓';position:absolute;left:0;color:#4a7c59;font-weight:bold;font-size:1.1rem}
 .health-conditions{display:flex;flex-wrap:wrap;gap:.75rem}
-.condition-tag{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#2d5a3d;padding:.5rem 1rem;border-radius:25px;font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.5rem;transition:all .3s ease}
+.condition-tag{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);
+  color:#2d5a3d;padding:.5rem 1rem;border-radius:25px;font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.5rem;transition:all .3s ease}
 .condition-tag:hover{background:linear-gradient(135deg,#4a7c59,#2d5a3d);color:#fff;transform:scale(1.05)}
 .timing-box{background:linear-gradient(135deg,#fff8e1,#ffecb3);border-left:4px solid #d4a843;padding:1.5rem;border-radius:0 15px 15px 0}
 .timing-box h4{color:#8b6914;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
@@ -162,9 +166,10 @@ body.dark .start-btn{
 </style>
 </head>
 <body>
+ <a href="/library" class="nav-link active"></a>
 <div class="bg-decoration"><div class="bg-circle"></div><div class="bg-circle"></div><div class="bg-circle"></div></div>
   <div style="display:flex; align-items:center; gap:15px;">
-    <button onclick="window.location.href='/dashboard'" 
+    <button onclick="window.location.href='/dashboard'"class="back-btn" 
     style="
       display:flex; align-items:center; gap:8px;
       background:#2f7d57; color:white;
@@ -185,7 +190,7 @@ body.dark .start-btn{
   </section>
 
   <section class="yoga-grid">
-    <div class="yoga-card" onclick="openModal('tree')">
+    <div class="yoga-card" data-yoga="tree" onclick="openModal('tree')">
       <div class="card-image"><img src="{{ url_for('static', filename='tree1.jpeg') }}" alt="Tree Pose"></div>
       <div class="card-content">
         <h3 class="yoga-name">Tree Pose</h3><p class="sanskrit-name">Vrikshasana</p>
@@ -193,41 +198,41 @@ body.dark .start-btn{
 
         </i><span><strong>Focus:</strong> Balance</span></div><div class="detail-item"><i class="fas fa-bone"></i><span><strong>Joint:</strong> Knee/Hip</span></div></div>
         <p class="card-description">Improves balance and strengthens the core and legs while promoting mental focus.</p>
-       <button class="start-btn" disabled>
-    ▶ Start Session
+       <button class="start-btn">Start Session</button>
+    
 </button>
       </div>
     </div>
-    <div class="yoga-card" onclick="openModal('warrior')">
+    <div class="yoga-card" data-yoga="warrior" onclick="openModal('warrior')">
       <div class="card-image"><img src="{{ url_for('static', filename='warrior1.jpeg') }}" alt="Warrior Pose"></div>
       <div class="card-content">
         <h3 class="yoga-name">Warrior Pose</h3><p class="sanskrit-name">Virabhadrasana</p>
         <div class="card-details"><div class="detail-item"><i class="fas fa-bullseye"></i><span><strong>Focus:</strong> Strength</span></div><div class="detail-item"><i class="fas fa-bone"></i><span><strong>Joint:</strong> Knee Angle</span></div></div>
         <p class="card-description">Increases stamina and stretches the chest and lungs while building lower body strength.</p>
-       <button class="start-btn" disabled>
-    ▶ Start Session
+       <button class="start-btn">Start Session</button>
+    
 </button>
       </div>
     </div>
-    <div class="yoga-card" onclick="openModal('mountain')">
+    <div class="yoga-card" data-yoga="mountain" onclick="openModal('mountain')">
       <div class="card-image"><img src="{{ url_for('static', filename='mountain2.jpeg') }}" alt="Mountain Pose"></div>
       <div class="card-content">
         <h3 class="yoga-name">Mountain Pose</h3><p class="sanskrit-name">Tadasana</p>
         <div class="card-details"><div class="detail-item"><i class="fas fa-bullseye"></i><span><strong>Focus:</strong> Alignment</span></div><div class="detail-item"><i class="fas fa-bone"></i><span><strong>Joint:</strong> Full Body</span></div></div>
         <p class="card-description">The foundation of all standing poses. Improves posture and body awareness.</p>
-      <button class="start-btn" disabled>
-    ▶ Start Session
+      <button class="start-btn">Start Session</button>
+   
 </button>
       </div>
     </div>
-    <div class="yoga-card" onclick="openModal('Namaste')">
+   <div class="yoga-card" data-yoga="namaste" onclick="openModal('namaste')">
       <div class="card-image"><img src="{{ url_for('static', filename='namaste1.jpeg') }}" alt="Salutation Pose"></div>
       <div class="card-content">
         <h3 class="yoga-name">Namaste</h3><p class="sanskrit-name">Pranamasana</p>
         <div class="card-details"><div class="detail-item"><i class="fas fa-bullseye"></i><span><strong>Focus:</strong> Calm</span></div><div class="detail-item"><i class="fas fa-bone"></i><span><strong>Joint:</strong> Elbows</span></div></div>
         <p class="card-description">Centers the mind and improves flexibility in the wrists while promoting inner peace.</p>
-      <button class="start-btn" disabled>
-    ▶ Start Session
+      <button class="start-btn">Start Session</button>
+    
 </button>
       </div>
     </div>
@@ -245,9 +250,10 @@ body.dark .start-btn{
       <div class="modal-section"><h3><i class="fas fa-info-circle"></i> About This Yoga</h3><p>Vrikshasana, or Tree Pose, is a standing balance pose that mimics the steady stance of a tree. This ancient yoga helps develop physical and mental steadiness, teaching us to root down while reaching up.</p></div>
       <div class="modal-section"><h3><i class="fas fa-heart"></i> Health Benefits</h3><ul class="benefits-list"><li>Improves balance and stability</li><li>Strengthens thighs, calves, ankles, and spine</li><li>Stretches the groins, inner thighs, chest, and shoulders</li><li>Relieves sciatica and reduces flat feet</li><li>Increases focus and mental clarity</li><li>Calms the central nervous system</li></ul></div>
       <div class="modal-section"><h3><i class="fas fa-medkit"></i> Helps With</h3><div class="health-conditions"><span class="condition-tag"><i class="fas fa-check"></i> Poor Balance</span><span class="condition-tag"><i class="fas fa-check"></i> Weak Legs</span><span class="condition-tag"><i class="fas fa-check"></i> Flat Feet</span><span class="condition-tag"><i class="fas fa-check"></i> Sciatica</span><span class="condition-tag"><i class="fas fa-check"></i> Stress & Anxiety</span><span class="condition-tag"><i class="fas fa-check"></i> Lack of Focus</span></div></div>
-      <div class="modal-section"><h3><i class="fas fa-clock"></i> Best Time to Practice</h3><div class="timing-box"><h4><i class="fas fa-sun"></i> Morning (Recommended)</h4><p>Practice during early morning (5-7 AM) on an empty stomach for best results. Can also be practiced in the evening, 4-6 hours after a meal.</p></div><div class="caution-box"><h4><i class="fas fa-exclamation-triangle"></i> Precautions</h4><p>Avoid with recent knee or hip injuries, severe arthritis, or high blood pressure. Those with vertigo should practice near a wall.</p></div></div>
+      <div class="modal-section"><h3><i class="fas fa-clock"></i> Best Time to Practice</h3><div class="timing-box"><h4><i class="fas fa-sun"></i> Morning (Recommended)</h4><p>Practice during early morning (5-7 AM) on an empty stomach for best results. Can also be practiced in the evening, 4-6 hours after a meal.</p></div><div class="caution-box">
+        <h4><i class="fas fa-exclamation-triangle"></i> Precautions</h4><p>Avoid with recent knee or hip injuries, severe arthritis, or high blood pressure. Those with vertigo should practice near a wall.</p></div></div>
     </div>
-    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('tree')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary"><i class="fas fa-play"></i> Start Practice</button></div>
+    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('tree')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary" onclick="startYoga('tree')"><i class="fas fa-play"></i> Start Practice</button></div>
   </div>
 </div>
 
@@ -262,7 +268,7 @@ body.dark .start-btn{
       <div class="modal-section"><h3><i class="fas fa-medkit"></i> Helps With</h3><div class="health-conditions"><span class="condition-tag"><i class="fas fa-check"></i> Weak Stamina</span><span class="condition-tag"><i class="fas fa-check"></i> Poor Digestion</span><span class="condition-tag"><i class="fas fa-check"></i> Tight Hips</span><span class="condition-tag"><i class="fas fa-check"></i> Back Pain</span><span class="condition-tag"><i class="fas fa-check"></i> Low Energy</span></div></div>
       <div class="modal-section"><h3><i class="fas fa-clock"></i> Best Time to Practice</h3><div class="timing-box"><h4><i class="fas fa-sun"></i> Morning or Evening</h4><p>Best in the morning to energize or evening to release tension. Ensure stomach is empty or practice 4-6 hours after a meal.</p></div><div class="caution-box"><h4><i class="fas fa-exclamation-triangle"></i> Precautions</h4><p>Avoid with high blood pressure, heart problems, or knee/hip injuries. Those with neck issues should keep gaze forward.</p></div></div>
     </div>
-    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('warrior')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary"><i class="fas fa-play"></i> Start Practice</button></div>
+    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('warrior')"><i class="fas fa-arrow-left"></i> Back<button class="modal-btn primary" onclick="startYoga('warrior')"><i class="fas fa-play"></i> Start Practice</button></div>
   </div>
 </div>
 
@@ -286,7 +292,7 @@ body.dark .start-btn{
       <i class="fas fa-check"></i> Breathing Issues</span></div></div>
       <div class="modal-section"><h3><i class="fas fa-clock"></i> Best Time to Practice</h3><div class="timing-box"><h4><i class="fas fa-sun"></i> Anytime</h4><p>Tadasana can be practiced at any time of day. Excellent as a starting pose, between other poses as a reset, or throughout daily activities.</p></div><div class="caution-box"><h4><i class="fas fa-exclamation-triangle"></i> Precautions</h4><p>Those with headaches, insomnia, or low blood pressure should be cautious. People with joint hypermobility should avoid locking knees.</p></div></div>
     </div>
-    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('mountain')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary"><i class="fas fa-play"></i> Start Practice</button></div>
+    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('mountain')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary" onclick="startYoga('mountain')"><i class="fas fa-play"></i> Start Practice</button></div>
   </div>
 </div>
 
@@ -301,7 +307,7 @@ body.dark .start-btn{
       <div class="modal-section"><h3><i class="fas fa-medkit"></i> Helps With</h3><div class="health-conditions"><span class="condition-tag"><i class="fas fa-check"></i> Stress & Anxiety</span><span class="condition-tag"><i class="fas fa-check"></i> Wrist Stiffness</span><span class="condition-tag"><i class="fas fa-check"></i> Poor Focus</span><span class="condition-tag"><i class="fas fa-check"></i> Sleep Issues</span><span class="condition-tag"><i class="fas fa-check"></i> High Blood Pressure</span></div></div>
       <div class="modal-section"><h3><i class="fas fa-clock"></i> Best Time to Practice</h3><div class="timing-box"><h4><i class="fas fa-sun"></i> Morning & Evening (Ideal)</h4><p>Practice during sunrise (4-6 AM) for spiritual benefits, or at sunset. Can also be used anytime you need to center yourself.</p></div><div class="caution-box"><h4><i class="fas fa-exclamation-triangle"></i> Precautions</h4><p>Very gentle pose with minimal contraindications. Those with severe wrist injuries may keep hands slightly apart.</p></div></div>
     </div>
-    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('Namaste')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary"><i class="fas fa-play"></i> Start Practice</button></div>
+    <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('Namaste')"><i class="fas fa-arrow-left"></i> Back</button><button class="modal-btn primary" onclick="startYoga('namaste')"><i class="fas fa-play"></i> Start Practice</button></div>
   </div>
 </div>
 
@@ -337,6 +343,22 @@ function openModal(id){document.getElementById('modal-'+id).classList.add('activ
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('active');document.body.style.overflow='auto'}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this){this.classList.remove('active');document.body.style.overflow='auto'}}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));document.body.style.overflow='auto'}});
+
+
+document.querySelectorAll(".start-btn").forEach(button => {
+    button.addEventListener("click", function(e) {
+
+        e.stopPropagation(); // modal open hone se rokega
+
+        let yoga = this.closest(".yoga-card").getAttribute("data-yoga");
+
+        // yaha redirect hoga
+        window.location.href = "/session/" + yoga;
+    });
+});
+function startYoga(yogaName){
+    window.location.href = "/session/" + yogaName;
+}
 
 </script>
 </body>
