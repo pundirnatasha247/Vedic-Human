@@ -10,6 +10,35 @@ body {
   font-family: Arial, sans-serif;
   background: #eef2ec;
 }
+
+/* 🌙 DARK MODE FULL FIX */
+body.dark{
+  background:#121212 !important;
+  color:#eee;
+}
+
+body.dark .header{
+  background:#1f1f1f !important;
+  border-bottom:1px solid #333;
+}
+
+body.dark .camera-box,
+body.dark .instructions,
+body.dark .image-box{
+  background:#1f1f1f !important;
+  color:#eee;
+}
+
+body.dark #timer-box{
+  background:#2a2a2a !important;
+}
+
+body.dark p,
+body.dark span,
+body.dark li{
+  color:#ccc !important;
+}
+
 .header {
   padding: 20px 40px;
   background: #f5f7f4;
@@ -132,11 +161,11 @@ button:hover { background: #245f43 !important; }
     <h2 style="margin:0;">🌿 Yoga Session</h2>
   </div>
   <select id="pose-select" onchange="changePose()">
-    <option value="namaste">Namaste Pose</option>
-    <option value="tree">Tree Pose</option>
-    <option value="warrior">Warrior Pose</option>
-    <option value="mountain">Mountain Pose</option>
-  </select>
+  <option value="namaste" {{ 'selected' if yoga == 'namaste' }}>Namaste Pose</option>
+  <option value="tree" {{ 'selected' if yoga == 'tree' }}>Tree Pose</option>
+  <option value="warrior" {{ 'selected' if yoga == 'warrior' }}>Warrior Pose</option>
+  <option value="mountain" {{ 'selected' if yoga == 'mountain' }}>Mountain Pose</option>
+</select>
 </div>
 
 <div class="container">
@@ -179,11 +208,20 @@ button:hover { background: #245f43 !important; }
 </div>
 
 <script>
-// ─── POSE DATA ───────────────────────────────────────────────
+  // 🌙 AUTO APPLY THEME (SESSION PAGE)
+document.addEventListener("DOMContentLoaded", () => {
+  let saved = localStorage.getItem("theme");
+
+  if(saved === "dark"){
+    document.body.classList.add("dark");
+  }
+});
+
+// ─── POSE DATA ──────────────────────────────
 const POSES = {
   namaste: {
     label: "Namaste Pose",
-    image: "/static/namaste.jpg",
+    image: "/static/namaste.jpeg",
     instructions: [
       "Stand straight with feet together.",
       "Join both hands at chest level in prayer position.",
@@ -194,7 +232,7 @@ const POSES = {
   },
   tree: {
     label: "Tree Pose",
-    image: "/static/tree.jpg",
+    image: "/static/tree.jpeg",
     instructions: [
       "Stand straight with feet together.",
       "Shift weight to one leg.",
@@ -205,7 +243,7 @@ const POSES = {
   },
   warrior: {
     label: "Warrior Pose",
-    image: "/static/Warrior.jpeg",
+    image: "/static/warrior1.jpeg",
     instructions: [
       "Stand with feet wide apart.",
       "Turn front foot 90° and back foot slightly inward.",
@@ -216,7 +254,7 @@ const POSES = {
   },
   mountain: {
     label: "Mountain Pose (Arms Up)",
-    image: "/static/Mountain.jpeg",
+    image: "/static/mountain1.jpeg",
     instructions: [
       "Stand straight with feet together.",
       "Keep both legs fully straight.",
@@ -240,6 +278,7 @@ window.onload = () => {
   video  = document.getElementById("video");
   canvas = document.getElementById("canvas");
   ctx    = canvas.getContext("2d");
+
   // dropdown ki value se load karo — hardcoded nahi
   currentPose = document.getElementById("pose-select").value;
   loadPoseUI(currentPose);
@@ -283,7 +322,7 @@ async function startPose() {
     modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING
   });
 
-  // model load hone ke baad button reset karo
+  // model load button reset 
   document.getElementById("start-btn").textContent = "▶️ Start Pose";
   document.getElementById("start-btn").disabled    = false;
   document.getElementById("start-btn").style.display = "none";
@@ -291,28 +330,18 @@ async function startPose() {
 
   detectPose();
 }
-
-// ─── SESSION UPDATE ──────────────────────────────────────────
-function startSession() {
-  fetch("/start-session", {
-    method: "POST",
-    credentials: "include"  // Flask session cookie bhejna zaroori
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert("Great job! Session Completed ✅");
-      window.location.href = "/dashboard";  // automatically dashboard pe redirect
-    }
-  })
-  .catch(err => {
-    console.error("Session update failed:", err);
-    window.location.href = "/dashboard";  // error pe bhi dashboard pe bhejo
-  });
-}
-
-// ─── STOP CAMERA ─────────────────────────────────────────────
+//stopcamera
 function stopCamera() {
+  let finalTime = Math.floor(bestTime);
+
+  if (finalTime < 10) {
+    alert("⚠️ Hold at least 10 seconds!");
+    return;
+  }
+
+  if (finalTime > 20) finalTime = 20;
+
+  // now stop camera
   if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
   if (video)  { video.pause(); video.srcObject = null; }
   if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
@@ -323,10 +352,15 @@ function stopCamera() {
   document.getElementById("start-btn").style.display   = "inline-block";
   document.getElementById("stop-btn").style.display    = "none";
 
-  // DB update + redirect
-  startSession();
+  fetch("/complete_session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      total_time: finalTime,
+      best_time: finalTime
+    })
+  });
 }
-
 // ─── ANGLE HELPER ────────────────────────────────────────────
 function getAngle(A, B, C) {
   const AB = { x: A.x - B.x, y: A.y - B.y };
@@ -489,6 +523,7 @@ async function detectPose() {
 
   animationId = requestAnimationFrame(detectPose);
 }
+
 </script>
 </body>
 </html>
