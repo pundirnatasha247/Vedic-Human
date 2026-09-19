@@ -1,92 +1,136 @@
-🌿 Vedic Human – AI Powered Yoga Trainer
+# 🌿 VedicHuman — Yog At Ease
 
-(In-House Project)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![TensorFlow.js](https://img.shields.io/badge/TensorFlow.js-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
+![MoveNet](https://img.shields.io/badge/MoveNet-Pose%20Estimation-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
-📌 Overview
+> **VedicHuman is a web-based yoga platform that uses real-time pose detection to help users practice yoga and track their progress.**
 
-Vedic Human is an AI-powered web application that helps users perform yoga correctly through real-time posture analysis and feedback. It integrates traditional Vedic wellness practices with modern technologies like Artificial Intelligence and Computer Vision.
+## ✨ Features
 
-The system uses pose detection models to analyze user movements via webcam and provides accuracy scores, posture correction suggestions, and performance tracking.
+- 🧘 **Real-Time Yoga Pose Detection** using TensorFlow.js and MoveNet
+- 📷 **Webcam-Based Practice** directly in the browser
+- 📐 **Pose Validation** using body keypoints, joint angles and positional rules
+- ⏱️ **Hold-Time Tracking** for yoga poses
+- 📚 **Yoga Library** with pose information and guidance
+- 👤 **User Authentication** with Flask sessions
+- 📊 **Progress Dashboard** with sessions, practice time and streaks
+- 🔥 **Streak & Milestone Tracking**
+- 💾 **SQLite Database** for users and practice history
 
-🎯 Objectives
-Promote a healthy lifestyle through yoga
-Provide real-time posture correction using AI
-Make yoga training accessible and affordable
-Track user performance and improvement over time
-🚀 Key Features
-🔐 User Authentication System (Login/Register)
-🧘 Live Yoga Session using Webcam
-🤖 AI Pose Detection (MoveNet / MediaPipe)
-📊 Real-Time Feedback & Accuracy Score
-📈 Progress Tracking & Session History
-📚 Yoga Library Section (poses & guides)
-💻 Responsive & User-Friendly Interface
-🛠️ Tech Stack
-Frontend
-HTML
-CSS
-JavaScript
-Backend
-Python (Flask)
-Database
-SQLite / MySQL
-AI / Computer Vision
-OpenCV
-MediaPipe / MoveNet
-Webcam Integration
-🏗️ System Architecture
+## 🧠 How It Works
 
-User → Frontend → Flask Backend → AI Model → Database → Feedback to User
+```text
+Webcam
+   ↓
+TensorFlow.js
+   ↓
+MoveNet Pose Detection
+   ↓
+17 Body Keypoints
+   ↓
+Pose Validation
+   ↓
+Hold Timer & Feedback
+   ↓
+Flask Backend
+   ↓
+SQLite
+   ↓
+Progress & Streaks
+```
 
-📂 Updated Project Structure
+The project uses **pre-trained MoveNet for pose estimation**. Custom JavaScript logic evaluates the detected keypoints using joint angles and relative positions to determine whether the selected yoga pose is being performed correctly.
+
+## 🧘 Supported Poses
+
+- 🌳 Tree Pose — Vrikshasana
+- ⚔️ Warrior Pose — Virabhadrasana
+- 🏔️ Mountain Pose — Tadasana
+- 🙏 Namaste — Pranamasana
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|---|---|
+| **Frontend** | HTML, CSS, JavaScript |
+| **AI / Pose Detection** | TensorFlow.js, MoveNet |
+| **Backend** | Python, Flask |
+| **Database** | SQLite |
+| **Web APIs** | MediaDevices API, Canvas API |
+
+## 📂 Project Structure
+
+```text
 VedicHuman/
 │
-├── app.py
-│
+├── static/
 ├── templates/
-│   ├── login.html 
-|   ├── signup.html
+│   ├── index.html
+│   ├── login.html
+│   ├── signup.html
 │   ├── dashboard.html
 │   ├── session.html
-│   ├── progress.html    
-│   └── library.html       
+│   ├── library.html
+│   └── progress.html
 │
-├── static/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-├── models/
-│   └── pose_detection.py
-│
-├── database/
-│   └── db.sqlite3
-│
+├── app.py
+├── requirements.txt
+├── Procfile
 └── README.md
-🔄 Working Flow
-User logs into the system
-Starts a yoga session
-Webcam captures live posture
-AI model analyzes pose in real time
-System generates feedback & accuracy score
-Data is stored for progress tracking
-User can view performance in Progress Page
-User can explore poses in Library Section
-📊 Future Enhancements
-🎤 Voice Assistant Integration
-🧠 Personalized Yoga Plans (AI-based)
-📱 Mobile Application
-☁️ Cloud-based Analytics
-⌚ Wearable Device Integration
-👩‍💻 Developed By
-Natasha Pundir
-Aanvi Rawat
-Sakshi
-📜 License
+```
 
-This project is for educational purposes only.
+## 🚀 Getting Started
 
-🙌 Acknowledgements
-OpenCV
-MediaPipe
-Flask Framework
+### Clone the repository
+
+```bash
+git clone https://github.com/sakshigupta023/VedicHuman.git
+cd VedicHuman
+```
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run the application
+
+```bash
+python app.py
+```
+
+Open:
+
+```text
+http://localhost:5000
+```
+
+Allow webcam access when starting a yoga session.
+
+## 🎯 Key Technical Highlights
+
+- Client-side pose inference using **TensorFlow.js + MoveNet**
+- Real-time webcam processing without OpenCV
+- Custom geometric pose-validation logic
+- Flask-based authentication and REST endpoints
+- SQLite-based session and progress persistence
+- Automated streak and milestone calculation
+
+## 👥 Contributors
+
+- Sakshi Gupta
+- Natasha Pundir
+- Aanvi Rawat
+
+---
+
+### 📜 License
+
+Developed as an academic/in-house project.
