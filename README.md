@@ -125,9 +125,9 @@ Allow webcam access when starting a yoga session.
 
 ## 👥 Contributors
 
-- Sakshi Gupta
-- Natasha Pundir
 - Aanvi Rawat
+- Natasha Pundir
+- Sakshi Gupta
 
 ---
 
